@@ -966,7 +966,7 @@ public final class ResourceBundleEditor extends UserDataHolderBase implements Do
               JSONArray jsonArray = new JSONArray(response.toString());
               if (jsonArray.length() > 0 && jsonArray.getJSONArray(0).length() > 0) {
                   JSONArray translationArray = jsonArray.getJSONArray(0).getJSONArray(0);
-                  return translationArray.getString(0);  // Extract translated text
+                  return escapeCharacters(translationArray.getString(0));  // Extract translated text
               }
           } else {
               // Log error or handle failure
@@ -977,5 +977,21 @@ public final class ResourceBundleEditor extends UserDataHolderBase implements Do
       }
 
       return toTranslate;
+  }
+
+  private String escapeCharacters(String original) {
+      // escape non ascii characters
+      if(original==null) {
+          return original;
+      }
+      StringBuilder sb = new StringBuilder();
+      for (char c : original.toCharArray()) {
+          if (c > 127) {
+              sb.append(String.format("\\u%04x", (int) c));
+          } else {
+              sb.append(c);
+          }
+      }
+      return sb.toString();
   }
 }
