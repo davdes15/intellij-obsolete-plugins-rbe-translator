@@ -7,8 +7,8 @@ plugins {
   id("org.jetbrains.intellij.platform") version "2.13.1"
 }
 
-group = "com.intellij.properties.bundle.editor"
-version = "261.0.1"
+group = "com.davdes15.properties.bundle.editor"
+version = "261.0.1-SNAPSHOT"
 
 repositories {
   mavenCentral()
