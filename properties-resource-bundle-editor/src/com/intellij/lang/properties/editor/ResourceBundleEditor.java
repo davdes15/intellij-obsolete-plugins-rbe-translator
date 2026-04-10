@@ -562,13 +562,13 @@ public final class ResourceBundleEditor extends UserDataHolderBase implements Do
   }
 
   private void selectionChanged() {
-    UIUtil.invokeLaterIfNeeded(() -> {
-      updateEditorsFromProperties(true);
-      final StatusBar statusBar = WindowManager.getInstance().getStatusBar(myProject);
-      if (statusBar != null) {
-        statusBar.setInfo(ResourceBundleEditorBundle.message("status.bar.selection.changed.message", getSelectedPropertyName()));
-      }
-    });
+      ApplicationManager.getApplication().runWriteAction(() -> {
+          updateEditorsFromProperties(true);
+          final StatusBar statusBar = WindowManager.getInstance().getStatusBar(myProject);
+          if (statusBar != null) {
+              statusBar.setInfo(ResourceBundleEditorBundle.message("status.bar.selection.changed.message", getSelectedPropertyName()));
+          }
+      });
   }
 
   private static void updateDocumentFromPropertyValue(final String value, final Document document) {
