@@ -167,7 +167,9 @@ public final class ResourceBundleEditor extends UserDataHolderBase implements Do
         if (selectedProperty != null && e.getOldLeadSelectionPath() != null) {
           for (Map.Entry<VirtualFile, EditorEx> entry : myEditors.entrySet()) {
             if (entry.getValue() == mySelectedEditor) {
-              writeEditorPropertyValue(selectedProperty.getName(), mySelectedEditor, entry.getKey());
+              ApplicationManager.getApplication().runWriteAction(() -> {
+                writeEditorPropertyValue(selectedProperty.getName(), mySelectedEditor, entry.getKey());
+              });
               break;
             }
           }
@@ -445,8 +447,10 @@ public final class ResourceBundleEditor extends UserDataHolderBase implements Do
         @Override
         public void focusLost(final @NotNull Editor editor) {
           if (!editor.isViewer() && propertiesFile.getContainingFile().isValid()) {
-            writeEditorPropertyValue(null, editor, propertiesFile.getVirtualFile());
-            myVfsListener.flush();
+            ApplicationManager.getApplication().runWriteAction(()->{
+                writeEditorPropertyValue(null, editor, propertiesFile.getVirtualFile());
+                myVfsListener.flush();
+            });
           }
         }
       });
